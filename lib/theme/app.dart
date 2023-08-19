@@ -11,5 +11,6 @@ class AppTheme {
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Pallete.blueColor,
     ),
+    useMaterial3: true,
   );
 }
