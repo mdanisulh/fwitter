@@ -18,29 +18,29 @@ class AuthField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: textEditingController,
+      obscureText: obscureText,
+      keyboardType: textInputType,
       style: const TextStyle(fontSize: 20),
       decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(fontSize: 20),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: const BorderSide(
-            color: Pallete.blueColor,
+            color: Pallete.blue,
             width: 4,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: const BorderSide(
-            color: Pallete.greyColor,
+            color: Pallete.grey,
             width: 2,
           ),
         ),
-        focusColor: Pallete.blueColor,
+        focusColor: Pallete.blue,
         contentPadding: const EdgeInsets.all(25),
-        label: Text(label),
-        labelStyle: const TextStyle(fontSize: 20),
       ),
-      obscureText: obscureText,
-      keyboardType: textInputType,
     );
   }
 }

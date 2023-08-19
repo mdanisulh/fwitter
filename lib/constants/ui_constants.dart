@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import 'constants.dart';
+import 'package:fwitter/constants/constants.dart';
 
 class UIConstants {
   static AppBar appBar() {
