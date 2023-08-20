@@ -3,20 +3,20 @@ import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fwitter/core/core.dart';
 
-final authApiProvider = Provider((ref) {
+final authAPIProvider = Provider((ref) {
   final account = ref.watch(appwriteAccountProvider);
-  return AuthApi(account: account);
+  return AuthAPI(account: account);
 });
 
-abstract class IAuthApi {
+abstract class IAuthAPI {
   Future<(Failure?, User?)> signUp({required String email, required String password});
   Future<(Failure?, Session?)> login({required String email, required String password});
   Future<User?> currentUserAccount();
 }
 
-class AuthApi implements IAuthApi {
+class AuthAPI implements IAuthAPI {
   final Account _account;
-  AuthApi({required Account account}) : _account = account;
+  AuthAPI({required Account account}) : _account = account;
 
   @override
   Future<(Failure?, User?)> signUp({required String email, required String password}) async {

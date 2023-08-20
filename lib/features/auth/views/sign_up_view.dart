@@ -44,59 +44,60 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
           ? const Loader()
           : Center(
               child: SingleChildScrollView(
-                  child: Padding(
-                padding: const EdgeInsets.all(25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AuthField(
-                      textEditingController: emailController,
-                      label: 'Email',
-                      textInputType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 25),
-                    AuthField(
-                      textEditingController: passwordController,
-                      label: 'Password',
-                      obscureText: true,
-                      textInputType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 40),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: RoundedSmallButton(
-                        onTap: onSignUp,
-                        label: 'Create',
+                child: Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AuthField(
+                        textEditingController: emailController,
+                        label: 'Email',
+                        textInputType: TextInputType.emailAddress,
                       ),
-                    ),
-                    const SizedBox(height: 40),
-                    RichText(
-                      text: TextSpan(
-                        text: "Already have an account?",
-                        style: const TextStyle(fontSize: 16),
-                        children: [
-                          TextSpan(
-                            text: ' Login',
-                            style: const TextStyle(
-                              color: Pallete.blue,
-                              fontSize: 16,
+                      const SizedBox(height: 25),
+                      AuthField(
+                        textEditingController: passwordController,
+                        label: 'Password',
+                        obscureText: true,
+                        textInputType: TextInputType.visiblePassword,
+                      ),
+                      const SizedBox(height: 40),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: RoundedSmallButton(
+                          onTap: onSignUp,
+                          label: 'Create',
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      RichText(
+                        text: TextSpan(
+                          text: "Already have an account?",
+                          style: const TextStyle(fontSize: 16),
+                          children: [
+                            TextSpan(
+                              text: ' Login',
+                              style: const TextStyle(
+                                color: Pallete.blue,
+                                fontSize: 16,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginView(),
+                                    ),
+                                  );
+                                },
                             ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LoginView(),
-                                  ),
-                                );
-                              },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              )),
+              ),
             ),
     );
   }
