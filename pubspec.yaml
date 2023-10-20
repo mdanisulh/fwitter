@@ -1,5 +1,5 @@
 name: fwitter
-description: A new Flutter project.
+description: A Twitter clone built with Flutter.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -38,7 +38,8 @@ dependencies:
   appwrite: ^9.0.1
   flutter_svg: ^2.0.7
   flutter_riverpod: ^2.3.7
-  stack_trace: ^1.11.0
+  image_picker: ^1.0.4
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
