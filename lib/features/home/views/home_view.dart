@@ -50,7 +50,10 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: Pallete.backgroundColor,
         items: [
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(_page == 0 ? AssetsConstants.homeFilledIcon : AssetsConstants.homeOutlinedIcon, colorFilter: const ColorFilter.mode(Pallete.white, BlendMode.srcIn)),
+            icon: SvgPicture.asset(
+              _page == 0 ? AssetsConstants.homeFilledIcon : AssetsConstants.homeOutlinedIcon,
+              colorFilter: const ColorFilter.mode(Pallete.white, BlendMode.srcIn),
+            ),
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(

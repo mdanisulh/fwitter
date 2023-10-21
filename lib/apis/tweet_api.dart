@@ -7,17 +7,22 @@ import 'package:fwitter/models/tweet_model.dart';
 
 final tweetAPIProvider = Provider((ref) {
   final database = ref.watch(appwriteDatabaseProvider);
-  return TweetAPI(database: database);
+  final realtime = ref.watch(appwriteRealtimeProvider);
+  return TweetAPI(database: database, realtime: realtime);
 });
 
 abstract class ITweetAPI {
   Future<List<Document>> getTweets();
   Future<(Failure?, Document?)> shareTweet({required Tweet tweet});
+  Stream<RealtimeMessage> getLatestTweet();
 }
 
 class TweetAPI implements ITweetAPI {
   final Databases _database;
-  TweetAPI({required Databases database}) : _database = database;
+  final Realtime _realtime;
+  TweetAPI({required Databases database, required Realtime realtime})
+      : _database = database,
+        _realtime = realtime;
 
   @override
   Future<(Failure?, Document?)> shareTweet({required Tweet tweet}) async {
@@ -38,7 +43,18 @@ class TweetAPI implements ITweetAPI {
 
   @override
   Future<List<Document>> getTweets() async {
-    final documentList = await _database.listDocuments(databaseId: AppwriteConstants.databaseID, collectionId: AppwriteConstants.tweetsCollectionID);
+    final documentList = await _database.listDocuments(
+      databaseId: AppwriteConstants.databaseID,
+      collectionId: AppwriteConstants.tweetsCollectionID,
+      queries: [
+        Query.orderDesc('tweetedAt'),
+      ],
+    );
     return documentList.documents;
+  }
+
+  @override
+  Stream<RealtimeMessage> getLatestTweet() {
+    return _realtime.subscribe(['databases.${AppwriteConstants.databaseID}.collections.${AppwriteConstants.tweetsCollectionID}.documents']).stream;
   }
 }

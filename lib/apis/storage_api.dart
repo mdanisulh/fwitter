@@ -15,7 +15,7 @@ class StorageAPI {
   StorageAPI({required Storage storage}) : _storage = storage;
 
   String fileURL({required id, String operation = 'view'}) {
-    return '${AppwriteConstants.endpoint}/storage/buckets/${AppwriteConstants.bucketID}/files/$id/$operation?project=${AppwriteConstants.projectID}&mode=admin';
+    return '${AppwriteConstants.endpoint}/storage/buckets/${AppwriteConstants.bucketID}/files/$id/$operation?project=${AppwriteConstants.projectID}';
   }
 
   Future<List<String>> uploadFiles({required List<File> files}) async {
