@@ -57,11 +57,14 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
           icon: const Icon(Icons.close, size: 30),
         ),
         actions: [
-          RoundedSmallButton(
-            onTap: shareTweet,
-            label: 'Tweet',
-            backgroundColor: Pallete.blue,
-            textColor: Pallete.white,
+          Container(
+            margin: const EdgeInsets.only(right: 15, top: 15),
+            child: RoundedSmallButton(
+              onTap: shareTweet,
+              label: 'Tweet',
+              backgroundColor: Pallete.blue,
+              textColor: Pallete.white,
+            ),
           ),
         ],
       ),
@@ -72,12 +75,15 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                 child: Column(
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(currentUser.profilePic),
-                          radius: 30,
+                        Container(
+                          margin: const EdgeInsets.all(10),
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(currentUser.profilePic),
+                            radius: 30,
+                          ),
                         ),
-                        const SizedBox(width: 15),
                         Expanded(
                           child: TextField(
                             controller: tweetTextController,

@@ -6,9 +6,7 @@ import 'package:fwitter/features/tweet/views/create_tweet_view.dart';
 import 'package:fwitter/theme/theme.dart';
 
 class HomeView extends StatefulWidget {
-  static route() => MaterialPageRoute(
-        builder: (context) => const HomeView(),
-      );
+  static route() => MaterialPageRoute(builder: (context) => const HomeView());
   const HomeView({super.key});
 
   @override
@@ -35,7 +33,7 @@ class _HomeViewState extends State<HomeView> {
       appBar: _page == 0 ? appBar : null,
       body: IndexedStack(
         index: _page,
-        // children: UIConstants.bottomTabBarPages,
+        children: UIConstants.bottomTabBarPages,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: onCreateTweet,

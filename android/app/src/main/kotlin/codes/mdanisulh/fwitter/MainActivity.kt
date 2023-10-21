@@ -1,4 +1,4 @@
-package codes.mdanisulh.fwitter
+package study.mdanisulh.fwitter
 
 import io.flutter.embedding.android.FlutterActivity
 

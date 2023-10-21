@@ -8,7 +8,7 @@
 PRODUCT_NAME = fwitter
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = codes.mdanisulh.fwitter
+PRODUCT_BUNDLE_IDENTIFIER = study.mdanisulh.fwitter
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 codes.mdanisulh. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 study.mdanisulh. All rights reserved.
