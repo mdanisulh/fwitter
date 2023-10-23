@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fwitter/common/common.dart';
 import 'package:fwitter/features/auth/controller/auth_controller.dart';
-import 'package:fwitter/features/auth/views/sign_up_view.dart';
+import 'package:fwitter/features/auth/views/login_view.dart';
 import 'package:fwitter/features/home/views/home_view.dart';
 import 'package:fwitter/theme/theme.dart';
 
@@ -23,7 +23,7 @@ class MyApp extends ConsumerWidget {
               if (user != null) {
                 return const HomeView();
               }
-              return const SignUpView();
+              return const LoginView();
             },
             error: (error, stackTrace) => ErrorPage(error: error.toString()),
             loading: () => const LoadingPage(),

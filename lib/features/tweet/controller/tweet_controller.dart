@@ -8,6 +8,7 @@ import 'package:fwitter/core/core.dart';
 import 'package:fwitter/core/enums/tweet_type_enum.dart';
 import 'package:fwitter/features/auth/controller/auth_controller.dart';
 import 'package:fwitter/models/tweet_model.dart';
+import 'package:fwitter/models/user_model.dart';
 
 final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((ref) {
   return TweetController(
@@ -143,5 +144,16 @@ class TweetController extends StateNotifier<bool> {
   Future<List<Tweet>> getTweets() async {
     final tweetList = await _tweetAPI.getTweets();
     return tweetList.map((tweet) => Tweet.fromMap(tweet.data)).toList();
+  }
+
+  void likeTweet(Tweet tweet, UserModel user) async {
+    var likes = tweet.likes;
+    if (likes.contains(user.uid)) {
+      likes.remove(user.uid);
+    } else {
+      likes.add(user.uid);
+    }
+    tweet = tweet.copyWith(likes: likes);
+    await _tweetAPI.likeTweet(tweet: tweet);
   }
 }
