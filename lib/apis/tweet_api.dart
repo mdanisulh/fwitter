@@ -5,7 +5,7 @@ import 'package:fwitter/constants/constants.dart';
 import 'package:fwitter/core/core.dart';
 import 'package:fwitter/models/tweet_model.dart';
 
-final tweetAPIProvider = Provider((ref) {
+final tweetAPIProvider = Provider.autoDispose((ref) {
   final database = ref.watch(appwriteDatabaseProvider);
   final realtime = ref.watch(appwriteRealtimeProvider);
   return TweetAPI(database: database, realtime: realtime);

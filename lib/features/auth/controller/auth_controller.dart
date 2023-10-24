@@ -8,25 +8,25 @@ import 'package:fwitter/features/auth/views/login_view.dart';
 import 'package:fwitter/features/home/views/home_view.dart';
 import 'package:fwitter/models/user_model.dart';
 
-final authControllerProvider = StateNotifierProvider<AuthController, bool>(
+final authControllerProvider = StateNotifierProvider.autoDispose<AuthController, bool>(
   (ref) => AuthController(
     authAPI: ref.watch(authAPIProvider),
     userAPI: ref.watch(userAPIProvider),
   ),
 );
 
-final currentUserDetailsProvider = FutureProvider((ref) {
-  final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
-  final userDetails = ref.watch(userDetailsProvider(currentUserId));
+final currentUserDetailsProvider = FutureProvider.autoDispose((ref) async {
+  final currentUser = await ref.watch(authControllerProvider.notifier).currentUser();
+  final userDetails = ref.watch(userDetailsProvider(currentUser?.$id));
   return userDetails.value;
 });
 
-final userDetailsProvider = FutureProvider.family((ref, String uid) {
+final userDetailsProvider = FutureProvider.autoDispose.family((ref, String? uid) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.getUserData(uid);
 });
 
-final currentUserAccountProvider = FutureProvider(
+final currentUserAccountProvider = FutureProvider.autoDispose(
   (ref) => ref.watch(authControllerProvider.notifier).currentUser(),
 );
 
@@ -56,18 +56,16 @@ class AuthController extends StateNotifier<bool> {
         following: [],
         isTwitterBlue: false,
       );
-      final user = await _userAPI.saveUserData(userModel: userModel);
+      final response = await _userAPI.saveUserData(userModel: userModel);
       if (context.mounted) {
-        if (user == null) {
+        if (response == null) {
           showSnackBar(context, 'Account successfully created. Please login!');
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => const LoginView(),
-            ),
+            MaterialPageRoute(builder: (context) => const LoginView()),
           );
         } else {
-          showSnackBar(context, user.message);
+          showSnackBar(context, response.message);
         }
       }
     } else {
@@ -95,7 +93,10 @@ class AuthController extends StateNotifier<bool> {
     }
   }
 
-  Future<UserModel> getUserData(String uid) async {
+  Future<UserModel?> getUserData(String? uid) async {
+    if (uid == null) {
+      return null;
+    }
     final document = await _userAPI.getUserData(uid);
     final updatedUser = UserModel.fromMap(document.data);
     return updatedUser;
