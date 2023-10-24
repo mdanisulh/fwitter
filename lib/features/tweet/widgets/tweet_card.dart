@@ -40,45 +40,45 @@ class TweetCard extends ConsumerWidget {
                               backgroundImage: NetworkImage(tweetAuthor.profilePic),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (tweet.retweetedBy.isNotEmpty)
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      AssetsConstants.retweetIcon,
-                                      colorFilter: const ColorFilter.mode(Pallete.grey, BlendMode.srcIn),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.only(left: 5),
-                                      child: Text(
-                                        'Retweeted by ${tweet.retweetedBy}',
-                                        style: const TextStyle(
-                                          color: Pallete.grey,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (tweet.retweetedBy.isNotEmpty)
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        AssetsConstants.retweetIcon,
+                                        colorFilter: const ColorFilter.mode(Pallete.grey, BlendMode.srcIn),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 5),
+                                        child: Text(
+                                          'Retweeted by ${tweet.retweetedBy}',
+                                          style: const TextStyle(
+                                            color: Pallete.grey,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      margin: const EdgeInsets.only(right: 5),
-                                      child: RichText(
-                                        overflow: TextOverflow.ellipsis,
-                                        text: TextSpan(children: [
-                                          TextSpan(
-                                            text: tweetAuthor.name,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
+                                    ],
+                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(right: 5),
+                                        child: RichText(
+                                          overflow: TextOverflow.ellipsis,
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: tweetAuthor.name,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
                                             ),
                                             TextSpan(
                                               text: ' @${tweetAuthor.name} · ',
