@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fwitter/apis/storage_api.dart';
@@ -76,6 +77,7 @@ class TweetController extends StateNotifier<bool> {
       commentIds: [],
       id: '',
       retweetCount: 0,
+      retweetedBy: '',
     );
     final res = await _tweetAPI.shareTweet(tweet: tweet);
     if (context.mounted) {
@@ -108,6 +110,7 @@ class TweetController extends StateNotifier<bool> {
       commentIds: [],
       id: '',
       retweetCount: 0,
+      retweetedBy: '',
     );
     final res = await _tweetAPI.shareTweet(tweet: tweet);
     if (context.mounted) {
@@ -147,7 +150,7 @@ class TweetController extends StateNotifier<bool> {
   }
 
   void likeTweet(Tweet tweet, UserModel user) async {
-    var likes = tweet.likes;
+    final likes = tweet.likes;
     if (likes.contains(user.uid)) {
       likes.remove(user.uid);
     } else {
@@ -155,5 +158,29 @@ class TweetController extends StateNotifier<bool> {
     }
     tweet = tweet.copyWith(likes: likes);
     await _tweetAPI.likeTweet(tweet: tweet);
+  }
+
+  void retweet(Tweet tweet, UserModel user, BuildContext context) async {
+    final res = await _tweetAPI.retweet(tweet: tweet);
+    if (res.$1 != null && context.mounted) {
+      showSnackBar(context, res.$1!.message);
+    } else {
+      tweet = tweet.copyWith(
+        retweetedBy: user.name,
+        retweetCount: 0,
+        likes: [],
+        commentIds: [],
+        tweetedAt: DateTime.now(),
+        id: ID.unique(),
+      );
+      final res2 = await _tweetAPI.shareTweet(tweet: tweet);
+      if (context.mounted) {
+        if (res2.$1 != null) {
+          showSnackBar(context, res2.$1!.message);
+        } else {
+          showSnackBar(context, 'Retweeted successfully!');
+        }
+      }
+    }
   }
 }

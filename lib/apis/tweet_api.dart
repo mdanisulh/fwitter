@@ -15,6 +15,7 @@ abstract class ITweetAPI {
   Future<List<Document>> getTweets();
   Future<(Failure?, Document?)> shareTweet({required Tweet tweet});
   Future<(Failure?, Document?)> likeTweet({required Tweet tweet});
+  Future<(Failure?, Document?)> retweet({required Tweet tweet});
   Stream<RealtimeMessage> getLatestTweet();
 }
 
@@ -69,6 +70,23 @@ class TweetAPI implements ITweetAPI {
         collectionId: AppwriteConstants.tweetsCollectionID,
         documentId: tweet.id,
         data: {'likes': tweet.likes},
+      );
+      return (null, document);
+    } on AppwriteException catch (e, stackTrace) {
+      return (Failure(e.message ?? 'An unknown error occurred!', stackTrace), null);
+    } catch (e, stackTrace) {
+      return (Failure(e.toString(), stackTrace), null);
+    }
+  }
+
+  @override
+  Future<(Failure?, Document?)> retweet({required Tweet tweet}) async {
+    try {
+      final document = await _database.updateDocument(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.tweetsCollectionID,
+        documentId: tweet.id,
+        data: {'retweetCount': tweet.retweetCount + 1},
       );
       return (null, document);
     } on AppwriteException catch (e, stackTrace) {
