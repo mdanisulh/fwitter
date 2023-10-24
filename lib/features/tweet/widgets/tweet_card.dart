@@ -25,7 +25,7 @@ class TweetCard extends ConsumerWidget {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
     return ref.watch(userDetailsProvider(tweet.uid)).when(
           data: (tweetAuthor) {
-            return currentUser == null
+            return currentUser == null || tweetAuthor == null
                 ? const SizedBox()
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

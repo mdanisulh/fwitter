@@ -15,8 +15,8 @@ final authControllerProvider = StateNotifierProvider.autoDispose<AuthController,
   ),
 );
 
-final currentUserDetailsProvider = FutureProvider.autoDispose((ref) {
-  final currentUser = ref.watch(currentUserAccountProvider).value;
+final currentUserDetailsProvider = FutureProvider.autoDispose((ref) async {
+  final currentUser = await ref.watch(authControllerProvider.notifier).currentUser();
   final userDetails = ref.watch(userDetailsProvider(currentUser?.$id));
   return userDetails.value;
 });
@@ -93,9 +93,9 @@ class AuthController extends StateNotifier<bool> {
     }
   }
 
-  Future<UserModel> getUserData(String? uid) async {
+  Future<UserModel?> getUserData(String? uid) async {
     if (uid == null) {
-      return UserModel.fromMap({});
+      return null;
     }
     final document = await _userAPI.getUserData(uid);
     final updatedUser = UserModel.fromMap(document.data);
