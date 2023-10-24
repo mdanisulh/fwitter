@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fwitter/constants/constants.dart';
 import 'package:fwitter/core/core.dart';
 
-final storageAPIProvider = Provider((ref) {
+final storageAPIProvider = Provider.autoDispose((ref) {
   final storage = ref.watch(appwriteStorageProvider);
   return StorageAPI(storage: storage);
 });

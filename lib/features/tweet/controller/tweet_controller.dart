@@ -10,7 +10,7 @@ import 'package:fwitter/features/auth/controller/auth_controller.dart';
 import 'package:fwitter/models/tweet_model.dart';
 import 'package:fwitter/models/user_model.dart';
 
-final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((ref) {
+final tweetControllerProvider = StateNotifierProvider.autoDispose<TweetController, bool>((ref) {
   return TweetController(
     ref: ref,
     tweetAPI: ref.watch(tweetAPIProvider),
@@ -18,12 +18,12 @@ final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((re
   );
 });
 
-final getTweetsProvider = FutureProvider((ref) {
+final getTweetsProvider = FutureProvider.autoDispose((ref) {
   final tweetController = ref.watch(tweetControllerProvider.notifier);
   return tweetController.getTweets();
 });
 
-final getLatestTweetProvider = StreamProvider((ref) {
+final getLatestTweetProvider = StreamProvider.autoDispose((ref) {
   final tweetAPI = ref.watch(tweetAPIProvider);
   return tweetAPI.getLatestTweet();
 });

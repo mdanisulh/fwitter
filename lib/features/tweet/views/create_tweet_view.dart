@@ -68,7 +68,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
           ),
         ],
       ),
-      body: isLoading || currentUser == null
+      body: isLoading || currentUser == null || currentUser.uid.isEmpty
           ? const Loader()
           : SafeArea(
               child: SingleChildScrollView(

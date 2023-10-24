@@ -5,7 +5,7 @@ import 'package:fwitter/constants/constants.dart';
 import 'package:fwitter/core/core.dart';
 import 'package:fwitter/models/user_model.dart';
 
-final userAPIProvider = Provider((ref) {
+final userAPIProvider = Provider.autoDispose((ref) {
   final db = ref.watch(appwriteDatabaseProvider);
   return UserAPI(db: db);
 });

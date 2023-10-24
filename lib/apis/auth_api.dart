@@ -3,7 +3,7 @@ import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fwitter/core/core.dart';
 
-final authAPIProvider = Provider((ref) {
+final authAPIProvider = Provider.autoDispose((ref) {
   final account = ref.watch(appwriteAccountProvider);
   return AuthAPI(account: account);
 });
