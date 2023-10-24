@@ -44,6 +44,26 @@ class TweetCard extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              if (tweet.retweetedBy.isNotEmpty)
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      AssetsConstants.retweetIcon,
+                                      colorFilter: const ColorFilter.mode(Pallete.grey, BlendMode.srcIn),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 5),
+                                      child: Text(
+                                        'Retweeted by ${tweet.retweetedBy}',
+                                        style: const TextStyle(
+                                          color: Pallete.grey,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -113,7 +133,9 @@ class TweetCard extends ConsumerWidget {
                                     TweetIconButton(
                                       pathname: AssetsConstants.retweetIcon,
                                       text: tweet.retweetCount.toString(),
-                                      onTap: () {},
+                                      onTap: () {
+                                        ref.read(tweetControllerProvider.notifier).retweet(tweet, currentUser, context);
+                                      },
                                     ),
                                     LikeButton(
                                       size: 25,
