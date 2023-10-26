@@ -12,10 +12,12 @@ final tweetAPIProvider = Provider.autoDispose((ref) {
 });
 
 abstract class ITweetAPI {
+  Future<Document?> getTweetById({required String tweetId});
   Future<List<Document>> getTweets();
   Future<(Failure?, Document?)> shareTweet({required Tweet tweet});
   Future<(Failure?, Document?)> likeTweet({required Tweet tweet});
   Future<(Failure?, Document?)> retweet({required Tweet tweet});
+  Future<(Failure?, Document?)> replyTweet({required Tweet tweet});
   Stream<RealtimeMessage> getLatestTweet();
 }
 
@@ -45,14 +47,18 @@ class TweetAPI implements ITweetAPI {
 
   @override
   Future<List<Document>> getTweets() async {
-    final documentList = await _database.listDocuments(
-      databaseId: AppwriteConstants.databaseID,
-      collectionId: AppwriteConstants.tweetsCollectionID,
-      queries: [
-        Query.orderDesc('tweetedAt'),
-      ],
-    );
-    return documentList.documents;
+    try {
+      final documentList = await _database.listDocuments(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.tweetsCollectionID,
+        queries: [
+          Query.orderDesc('tweetedAt'),
+        ],
+      );
+      return documentList.documents;
+    } catch (e) {
+      return [];
+    }
   }
 
   @override
@@ -87,6 +93,37 @@ class TweetAPI implements ITweetAPI {
         collectionId: AppwriteConstants.tweetsCollectionID,
         documentId: tweet.id,
         data: {'retweetCount': tweet.retweetCount + 1},
+      );
+      return (null, document);
+    } on AppwriteException catch (e, stackTrace) {
+      return (Failure(e.message ?? 'An unknown error occurred!', stackTrace), null);
+    } catch (e, stackTrace) {
+      return (Failure(e.toString(), stackTrace), null);
+    }
+  }
+
+  @override
+  Future<Document?> getTweetById({required String tweetId}) async {
+    try {
+      final tweet = await _database.getDocument(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.tweetsCollectionID,
+        documentId: tweetId,
+      );
+      return tweet;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<(Failure?, Document?)> replyTweet({required Tweet tweet}) async {
+    try {
+      final document = await _database.updateDocument(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.tweetsCollectionID,
+        documentId: tweet.id,
+        data: {'commentIds': tweet.commentIds},
       );
       return (null, document);
     } on AppwriteException catch (e, stackTrace) {

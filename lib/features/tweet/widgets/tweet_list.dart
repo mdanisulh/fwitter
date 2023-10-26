@@ -15,29 +15,30 @@ class TweetList extends ConsumerWidget {
           data: (tweets) {
             return ref.watch(getLatestTweetProvider).when(
                   data: (data) {
-                    if (data.events.contains(
-                      'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.create',
-                    )) {
-                      final tweet = Tweet.fromMap(data.payload);
-                      tweets.insert(0, tweet);
-                    }
-                    if (data.events.contains(
-                      'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.update',
-                    )) {
-                      final tweet = Tweet.fromMap(data.payload);
-                      final index = tweets.indexWhere((element) => element.id == tweet.id);
-                      tweets[index] = tweet;
-                    }
-                    if (data.events.contains(
-                      'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.delete',
-                    )) {
-                      final tweet = Tweet.fromMap(data.payload);
-                      tweets.removeWhere((element) => element.id == tweet.id);
+                    final tweet = Tweet.fromMap(data.payload);
+                    if (tweet.repliedTo.isEmpty) {
+                      if (data.events.contains(
+                        'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.create',
+                      )) {
+                        tweets.insert(0, tweet);
+                      }
+                      if (data.events.contains(
+                        'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.update',
+                      )) {
+                        final index = tweets.indexWhere((element) => element.id == tweet.id);
+                        tweets[index] = tweet;
+                      }
+                      if (data.events.contains(
+                        'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.delete',
+                      )) {
+                        tweets.removeWhere((element) => element.id == tweet.id);
+                      }
                     }
                     return ListView.builder(
                       itemCount: tweets.length,
                       itemBuilder: (context, index) {
                         final tweet = tweets[index];
+                        if (tweet.repliedTo.isNotEmpty) return const SizedBox();
                         return TweetCard(tweet: tweet);
                       },
                     );
@@ -48,6 +49,7 @@ class TweetList extends ConsumerWidget {
                       itemCount: tweets.length,
                       itemBuilder: (context, index) {
                         final tweet = tweets[index];
+                        if (tweet.repliedTo.isNotEmpty) return const SizedBox();
                         return TweetCard(tweet: tweet);
                       },
                     );

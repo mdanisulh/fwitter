@@ -13,6 +13,7 @@ class Tweet {
   final String id;
   final int retweetCount;
   final String retweetedBy;
+  final String repliedTo;
 
   Tweet({
     required this.text,
@@ -27,6 +28,7 @@ class Tweet {
     required this.id,
     required this.retweetCount,
     required this.retweetedBy,
+    required this.repliedTo,
   });
 
   Tweet copyWith({
@@ -42,6 +44,7 @@ class Tweet {
     String? id,
     int? retweetCount,
     String? retweetedBy,
+    String? repliedTo,
   }) {
     return Tweet(
       text: text ?? this.text,
@@ -56,6 +59,7 @@ class Tweet {
       id: id ?? this.id,
       retweetCount: retweetCount ?? this.retweetCount,
       retweetedBy: retweetedBy ?? this.retweetedBy,
+      repliedTo: repliedTo ?? this.repliedTo,
     );
   }
 
@@ -72,6 +76,7 @@ class Tweet {
       'commentIds': commentIds,
       'retweetCount': retweetCount,
       'retweetedBy': retweetedBy,
+      'repliedTo': repliedTo,
     };
   }
 
@@ -89,22 +94,23 @@ class Tweet {
       id: map['\$id'] ?? '',
       retweetCount: map['retweetCount'] ?? 0,
       retweetedBy: map['retweetedBy'] ?? '',
+      repliedTo: map['repliedTo'] ?? '',
     );
   }
 
   @override
   String toString() {
-    return 'Tweet(text: $text, link: $link, uid: $uid, hashtags: $hashtags, imageLinks: $imageLinks, tweetType: $tweetType, tweetedAt: $tweetedAt, likes: $likes, commentIds: $commentIds, id: $id, retweetCount: $retweetCount), retweetedBy: $retweetedBy';
+    return 'Tweet(text: $text, link: $link, uid: $uid, hashtags: $hashtags, imageLinks: $imageLinks, tweetType: $tweetType, tweetedAt: $tweetedAt, likes: $likes, commentIds: $commentIds, id: $id, retweetCount: $retweetCount), retweetedBy: $retweetedBy, repliedTo: $repliedTo';
   }
 
   @override
   bool operator ==(covariant Tweet other) {
     if (identical(this, other)) return true;
-    return other.text == text && other.link == link && other.uid == uid && other.hashtags == hashtags && other.imageLinks == imageLinks && other.tweetType == tweetType && other.tweetedAt == tweetedAt && other.likes == likes && other.commentIds == commentIds && other.id == id && other.retweetCount == retweetCount && other.retweetedBy == retweetedBy;
+    return other.text == text && other.link == link && other.uid == uid && other.hashtags == hashtags && other.imageLinks == imageLinks && other.tweetType == tweetType && other.tweetedAt == tweetedAt && other.likes == likes && other.commentIds == commentIds && other.id == id && other.retweetCount == retweetCount && other.retweetedBy == retweetedBy && other.repliedTo == repliedTo;
   }
 
   @override
   int get hashCode {
-    return text.hashCode ^ link.hashCode ^ uid.hashCode ^ hashtags.hashCode ^ imageLinks.hashCode ^ tweetType.hashCode ^ tweetedAt.hashCode ^ likes.hashCode ^ commentIds.hashCode ^ id.hashCode ^ retweetCount.hashCode ^ retweetedBy.hashCode;
+    return text.hashCode ^ link.hashCode ^ uid.hashCode ^ hashtags.hashCode ^ imageLinks.hashCode ^ tweetType.hashCode ^ tweetedAt.hashCode ^ likes.hashCode ^ commentIds.hashCode ^ id.hashCode ^ retweetCount.hashCode ^ retweetedBy.hashCode ^ repliedTo.hashCode;
   }
 }
