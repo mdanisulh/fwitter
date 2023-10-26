@@ -24,6 +24,16 @@ final getTweetsProvider = FutureProvider.autoDispose((ref) {
   return tweetController.getTweets();
 });
 
+final getTweetByIDProvider = FutureProvider.autoDispose.family((ref, String tweetId) {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getTweetById(tweetId: tweetId);
+});
+
+final replyTweetProvider = FutureProvider.autoDispose.family((ref, Tweet tweet) {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.replyTweet(tweet: tweet);
+});
+
 final getLatestTweetProvider = StreamProvider.autoDispose((ref) {
   final tweetAPI = ref.watch(tweetAPIProvider);
   return tweetAPI.getLatestTweet();
@@ -39,29 +49,23 @@ class TweetController extends StateNotifier<bool> {
         _tweetAPI = tweetAPI,
         super(false);
 
-  void shareTweet({
+  Future<Tweet?> shareTweet({
     required List<File> images,
     required String text,
+    String repliedTo = '',
     required BuildContext context,
   }) async {
-    if (text.isEmpty) {
-      showSnackBar(context, 'Please enter some text');
-      return;
+    if (text.isEmpty && images.isEmpty) {
+      showSnackBar(context, 'Please enter some text or add an image!');
+      return null;
     }
-    if (images.isNotEmpty) {
-      _shareImageTweet(images: images, text: text, context: context);
-    } else {
-      _shareTextTweet(text: text, context: context);
-    }
-  }
-
-  void _shareImageTweet({
-    required List<File> images,
-    required String text,
-    required BuildContext context,
-  }) async {
     state = true;
-    final imageLinks = await _storageAPI.uploadFiles(files: images);
+    final List<String> imageLinks;
+    if (images.isNotEmpty) {
+      imageLinks = await _storageAPI.uploadFiles(files: images);
+    } else {
+      imageLinks = [];
+    }
     final link = _getLinkFromText(text);
     final hashtags = _getHashtagsFromText(text);
     final user = _ref.read(currentUserDetailsProvider).value!;
@@ -71,56 +75,25 @@ class TweetController extends StateNotifier<bool> {
       uid: user.uid,
       hashtags: hashtags,
       imageLinks: imageLinks,
-      tweetType: TweetType.image,
+      tweetType: images.isEmpty ? TweetType.text : TweetType.image,
       tweetedAt: DateTime.now(),
       likes: [],
       commentIds: [],
       id: '',
       retweetCount: 0,
       retweetedBy: '',
+      repliedTo: repliedTo,
     );
     final res = await _tweetAPI.shareTweet(tweet: tweet);
+    state = false;
     if (context.mounted) {
-      if (res.$2 != null) {
-        Navigator.pop(context);
-      } else {
+      if (res.$1 != null) {
         showSnackBar(context, res.$1!.message);
+      } else {
+        return Tweet.fromMap(res.$2!.data);
       }
     }
-    state = false;
-  }
-
-  void _shareTextTweet({
-    required String text,
-    required BuildContext context,
-  }) async {
-    state = true;
-    final link = _getLinkFromText(text);
-    final hashtags = _getHashtagsFromText(text);
-    final user = _ref.read(currentUserDetailsProvider).value!;
-    Tweet tweet = Tweet(
-      text: text,
-      link: link,
-      uid: user.uid,
-      hashtags: hashtags,
-      imageLinks: [],
-      tweetType: TweetType.text,
-      tweetedAt: DateTime.now(),
-      likes: [],
-      commentIds: [],
-      id: '',
-      retweetCount: 0,
-      retweetedBy: '',
-    );
-    final res = await _tweetAPI.shareTweet(tweet: tweet);
-    if (context.mounted) {
-      if (res.$2 != null) {
-        Navigator.pop(context);
-      } else {
-        showSnackBar(context, res.$1!.message);
-      }
-    }
-    state = false;
+    return null;
   }
 
   String _getLinkFromText(String text) {
@@ -170,6 +143,7 @@ class TweetController extends StateNotifier<bool> {
         retweetCount: 0,
         likes: [],
         commentIds: [],
+        repliedTo: '',
         tweetedAt: DateTime.now(),
         id: ID.unique(),
       );
@@ -182,5 +156,15 @@ class TweetController extends StateNotifier<bool> {
         }
       }
     }
+  }
+
+  Future<Tweet?> getTweetById({required String tweetId}) async {
+    final tweet = await _tweetAPI.getTweetById(tweetId: tweetId);
+    if (tweet == null) return null;
+    return Tweet.fromMap(tweet.data);
+  }
+
+  void replyTweet({required Tweet tweet}) async {
+    await _tweetAPI.replyTweet(tweet: tweet);
   }
 }
