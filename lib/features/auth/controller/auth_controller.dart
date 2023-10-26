@@ -17,8 +17,8 @@ final authControllerProvider = StateNotifierProvider.autoDispose<AuthController,
 
 final currentUserDetailsProvider = FutureProvider.autoDispose((ref) async {
   final currentUser = await ref.watch(authControllerProvider.notifier).currentUser();
-  final userDetails = ref.watch(userDetailsProvider(currentUser?.$id));
-  return userDetails.value;
+  final userDetails = await ref.watch(authControllerProvider.notifier).getUserData(currentUser?.$id);
+  return userDetails;
 });
 
 final userDetailsProvider = FutureProvider.autoDispose.family((ref, String? uid) {

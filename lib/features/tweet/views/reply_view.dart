@@ -31,42 +31,42 @@ class ReplyView extends ConsumerWidget {
               },
             ),
           ),
+          TextField(
+            controller: controller,
+            style: const TextStyle(fontSize: 16),
+            maxLines: null,
+            decoration: InputDecoration(
+              constraints: const BoxConstraints(maxHeight: 150),
+              contentPadding: const EdgeInsets.all(20),
+              hintText: 'Reply',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: Pallete.grey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: Pallete.grey),
+              ),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  ref.watch(tweetControllerProvider.notifier).shareTweet(
+                    images: [],
+                    text: controller.text,
+                    repliedTo: tweet.id,
+                    context: context,
+                  ).then((reply) {
+                    if (reply != null) {
+                      tweet.commentIds.add(reply.id);
+                      ref.watch(replyTweetProvider(tweet));
+                    }
+                  });
+                  controller.text = '';
+                },
+                child: const Icon(Icons.send, size: 25),
+              ),
+            ),
+          ),
         ],
-      ),
-      bottomNavigationBar: TextField(
-        controller: controller,
-        style: const TextStyle(fontSize: 16),
-        maxLines: null,
-        decoration: InputDecoration(
-          constraints: const BoxConstraints(maxHeight: 150),
-          contentPadding: const EdgeInsets.all(20),
-          hintText: 'Reply',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Pallete.grey),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Pallete.grey),
-          ),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              ref.watch(tweetControllerProvider.notifier).shareTweet(
-                images: [],
-                text: controller.text,
-                repliedTo: tweet.id,
-                context: context,
-              ).then((reply) {
-                if (reply != null) {
-                  tweet.commentIds.add(reply.id);
-                  ref.watch(replyTweetProvider(tweet));
-                }
-              });
-              controller.text = '';
-            },
-            child: const Icon(Icons.send, size: 25),
-          ),
-        ),
       ),
     );
   }
