@@ -28,7 +28,6 @@ class _SearchViewState extends ConsumerState<SearchView> {
       appBar: AppBar(
         title: TextField(
           controller: searchTextController,
-          autofocus: true,
           onSubmitted: (value) => setState(() {
             isSearching = searchTextController.text.isNotEmpty;
           }),
