@@ -73,31 +73,37 @@ class TweetCard extends ConsumerWidget {
                                   Expanded(
                                     child: Container(
                                       margin: const EdgeInsets.only(right: 5),
-                                      child: RichText(
-                                        overflow: TextOverflow.ellipsis,
-                                        text: TextSpan(children: [
-                                          TextSpan(
-                                            text: tweetAuthor.name,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: RichText(
+                                              overflow: TextOverflow.ellipsis,
+                                              text: TextSpan(children: [
+                                                TextSpan(
+                                                  text: tweetAuthor.name,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: ' @${tweetAuthor.username}',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    color: Pallete.grey,
+                                                  ),
+                                                ),
+                                              ]),
                                             ),
                                           ),
-                                          TextSpan(
-                                            text: ' @${tweetAuthor.name} · ',
+                                          Text(
+                                            timeago.format(tweet.tweetedAt, locale: 'en_short'),
                                             style: const TextStyle(
                                               fontSize: 16,
                                               color: Pallete.grey,
                                             ),
                                           ),
-                                          TextSpan(
-                                            text: timeago.format(tweet.tweetedAt, locale: 'en_short'),
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Pallete.grey,
-                                            ),
-                                          ),
-                                        ]),
+                                        ],
                                       ),
                                     ),
                                   ),

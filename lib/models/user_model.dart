@@ -2,6 +2,7 @@ class UserModel {
   final String uid;
   final String email;
   final String name;
+  final String username;
   final String bio;
   final String profilePic;
   final String bannerPic;
@@ -13,6 +14,7 @@ class UserModel {
     required this.uid,
     required this.email,
     required this.name,
+    required this.username,
     required this.bio,
     required this.profilePic,
     required this.bannerPic,
@@ -25,6 +27,7 @@ class UserModel {
     String? uid,
     String? email,
     String? name,
+    String? username,
     String? bio,
     String? profilePic,
     String? bannerPic,
@@ -36,6 +39,7 @@ class UserModel {
       uid: uid ?? this.uid,
       email: email ?? this.email,
       name: name ?? this.name,
+      username: username ?? this.username,
       bio: bio ?? this.bio,
       profilePic: profilePic ?? this.profilePic,
       bannerPic: bannerPic ?? this.bannerPic,
@@ -49,6 +53,7 @@ class UserModel {
     return <String, dynamic>{
       'email': email,
       'name': name,
+      'username': username,
       'bio': bio,
       'profilePic': profilePic,
       'bannerPic': bannerPic,
@@ -62,6 +67,7 @@ class UserModel {
     return UserModel(
       email: map['email'] ?? '',
       name: map['name'] ?? '',
+      username: map['username'] ?? '',
       followers: List<String>.from(map['followers'] ?? []),
       following: List<String>.from(map['following'] ?? []),
       profilePic: map['profilePic'] ?? '',
@@ -74,17 +80,17 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, email: $email, name: $name, bio: $bio, profilePic: $profilePic, bannerPic: $bannerPic, followers: $followers, following: $following, isTwitterBlue: $isTwitterBlue)';
+    return 'UserModel(uid: $uid, email: $email, name: $name, username: $username, bio: $bio, profilePic: $profilePic, bannerPic: $bannerPic, followers: $followers, following: $following, isTwitterBlue: $isTwitterBlue)';
   }
 
   @override
   bool operator ==(covariant UserModel other) {
     if (identical(this, other)) return true;
-    return other.uid == uid && other.email == email && other.name == name && other.bio == bio && other.profilePic == profilePic && other.bannerPic == bannerPic && other.followers == followers && other.following == following && other.isTwitterBlue == isTwitterBlue;
+    return other.uid == uid && other.email == email && other.name == name && other.username == username && other.bio == bio && other.profilePic == profilePic && other.bannerPic == bannerPic && other.followers == followers && other.following == following && other.isTwitterBlue == isTwitterBlue;
   }
 
   @override
   int get hashCode {
-    return uid.hashCode ^ email.hashCode ^ name.hashCode ^ bio.hashCode ^ profilePic.hashCode ^ bannerPic.hashCode ^ followers.hashCode ^ following.hashCode ^ isTwitterBlue.hashCode;
+    return uid.hashCode ^ email.hashCode ^ name.hashCode ^ username.hashCode ^ bio.hashCode ^ profilePic.hashCode ^ bannerPic.hashCode ^ followers.hashCode ^ following.hashCode ^ isTwitterBlue.hashCode;
   }
 }

@@ -13,6 +13,7 @@ final userAPIProvider = Provider.autoDispose((ref) {
 abstract class IUserAPI {
   Future<Failure?> saveUserData({required UserModel userModel});
   Future<Document> getUserData(String uid);
+  Future<List<Document>> searchUsers(String query);
 }
 
 class UserAPI implements IUserAPI {
@@ -43,5 +44,26 @@ class UserAPI implements IUserAPI {
       collectionId: AppwriteConstants.usersCollectionID,
       documentId: uid,
     );
+  }
+
+  @override
+  Future<List<Document>> searchUsers(String query) async {
+    try {
+      final searchByName = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.usersCollectionID,
+        queries: [Query.search('name', query)],
+      );
+      final searchByUserName = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.usersCollectionID,
+        queries: [Query.search('username', query)],
+      );
+      final users = searchByName.documents + searchByUserName.documents;
+      users.sort((a, b) => a.data['name'].compareTo(b.data['name']));
+      return users;
+    } catch (e) {
+      return [];
+    }
   }
 }
