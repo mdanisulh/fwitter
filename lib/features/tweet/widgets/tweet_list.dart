@@ -13,25 +13,29 @@ class TweetList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(getTweetsProvider).when(
           data: (tweets) {
-            return ref.watch(getLatestTweetProvider).when(
+            return ref.watch(getLatestDataProvider).when(
                   data: (data) {
-                    final tweet = Tweet.fromMap(data.payload);
-                    if (tweet.repliedTo.isEmpty) {
-                      if (data.events.contains(
-                        'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.create',
-                      )) {
-                        tweets.insert(0, tweet);
-                      }
-                      if (data.events.contains(
-                        'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.update',
-                      )) {
-                        final index = tweets.indexWhere((element) => element.id == tweet.id);
-                        tweets[index] = tweet;
-                      }
-                      if (data.events.contains(
-                        'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.delete',
-                      )) {
-                        tweets.removeWhere((element) => element.id == tweet.id);
+                    if (data.events.contains(
+                      'databases.*.collections.${AppwriteConstants.tweetsCollectionID}',
+                    )) {
+                      final tweet = Tweet.fromMap(data.payload);
+                      if (tweet.repliedTo.isEmpty) {
+                        if (data.events.contains(
+                          'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.create',
+                        )) {
+                          tweets.insert(0, tweet);
+                        }
+                        if (data.events.contains(
+                          'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.update',
+                        )) {
+                          final index = tweets.indexWhere((element) => element.id == tweet.id);
+                          tweets[index] = tweet;
+                        }
+                        if (data.events.contains(
+                          'databases.*.collections.${AppwriteConstants.tweetsCollectionID}.documents.*.delete',
+                        )) {
+                          tweets.removeWhere((element) => element.id == tweet.id);
+                        }
                       }
                     }
                     return ListView.builder(

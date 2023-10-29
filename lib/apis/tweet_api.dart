@@ -14,11 +14,12 @@ final tweetAPIProvider = Provider.autoDispose((ref) {
 abstract class ITweetAPI {
   Future<Document?> getTweetById({required String tweetId});
   Future<List<Document>> getTweets();
+  Future<List<Document>> getUserTweets({required String userId});
   Future<(Failure?, Document?)> shareTweet({required Tweet tweet});
   Future<(Failure?, Document?)> likeTweet({required Tweet tweet});
   Future<(Failure?, Document?)> retweet({required Tweet tweet});
   Future<(Failure?, Document?)> replyTweet({required Tweet tweet});
-  Stream<RealtimeMessage> getLatestTweet();
+  Stream<RealtimeMessage> getLatestData();
 }
 
 class TweetAPI implements ITweetAPI {
@@ -62,9 +63,10 @@ class TweetAPI implements ITweetAPI {
   }
 
   @override
-  Stream<RealtimeMessage> getLatestTweet() {
+  Stream<RealtimeMessage> getLatestData() {
     return _realtime.subscribe([
       'databases.${AppwriteConstants.databaseID}.collections.${AppwriteConstants.tweetsCollectionID}.documents',
+      'databases.${AppwriteConstants.databaseID}.collections.${AppwriteConstants.usersCollectionID}.documents',
     ]).stream;
   }
 
@@ -130,6 +132,22 @@ class TweetAPI implements ITweetAPI {
       return (Failure(e.message ?? 'An unknown error occurred!', stackTrace), null);
     } catch (e, stackTrace) {
       return (Failure(e.toString(), stackTrace), null);
+    }
+  }
+
+  @override
+  Future<List<Document>> getUserTweets({required String userId}) async {
+    try {
+      final documentList = await _database.listDocuments(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.tweetsCollectionID,
+        queries: [
+          Query.equal('uid', userId),
+        ],
+      );
+      return documentList.documents;
+    } catch (e) {
+      return [];
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fwitter/apis/auth_api.dart';
 import 'package:fwitter/apis/user_api.dart';
+import 'package:fwitter/constants/constants.dart';
 import 'package:fwitter/core/core.dart';
 import 'package:fwitter/features/auth/views/login_view.dart';
 import 'package:fwitter/features/home/views/home_view.dart';
@@ -49,14 +50,15 @@ class AuthController extends StateNotifier<bool> {
         uid: res.$2!.$id,
         email: email,
         name: email.split('@')[0],
+        username: email.split('@')[0],
         bio: '',
-        profilePic: 'https://avatars.githubusercontent.com/u/112408973?v=4',
+        profilePic: '${AppwriteConstants.endpoint}/storage/buckets/${AppwriteConstants.bucketID}/files/default_profile/view?project=${AppwriteConstants.projectID}',
         bannerPic: '',
         followers: [],
         following: [],
         isTwitterBlue: false,
       );
-      final response = await _userAPI.saveUserData(userModel: userModel);
+      final response = await _userAPI.saveUserData(user: userModel);
       if (context.mounted) {
         if (response == null) {
           showSnackBar(context, 'Account successfully created. Please login!');
