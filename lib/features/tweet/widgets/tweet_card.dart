@@ -12,6 +12,7 @@ import 'package:fwitter/features/tweet/widgets/styled_text.dart';
 import 'package:fwitter/features/tweet/widgets/tweet_icon_button.dart';
 import 'package:fwitter/features/user_profile/views/user_profile_view.dart';
 import 'package:fwitter/models/tweet_model.dart';
+import 'package:fwitter/models/user_model.dart';
 import 'package:fwitter/theme/theme.dart';
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:like_button/like_button.dart';
@@ -27,6 +28,14 @@ class TweetCard extends ConsumerWidget {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
     return ref.watch(userDetailsProvider(tweet.uid)).when(
           data: (tweetAuthor) {
+            if (tweetAuthor == null) return const SizedBox();
+            ref.watch(getLatestDataProvider).whenData(
+              (data) {
+                if (data.events.contains('databases.*.collections.${AppwriteConstants.usersCollectionID}.documents.${tweetAuthor!.uid}.update')) {
+                  tweetAuthor = UserModel.fromMap(data.payload);
+                }
+              },
+            );
             return currentUser == null || tweetAuthor == null
                 ? const SizedBox()
                 : Container(
@@ -40,10 +49,10 @@ class TweetCard extends ConsumerWidget {
                         Container(
                           margin: const EdgeInsets.all(10),
                           child: GestureDetector(
-                            onTap: () => Navigator.push(context, UserProfileView.route(tweetAuthor)),
+                            onTap: () => Navigator.push(context, UserProfileView.route(tweetAuthor!)),
                             child: CircleAvatar(
                               radius: 30,
-                              backgroundImage: NetworkImage(tweetAuthor.profilePic),
+                              backgroundImage: NetworkImage(tweetAuthor!.profilePic),
                             ),
                           ),
                         ),
@@ -84,14 +93,14 @@ class TweetCard extends ConsumerWidget {
                                               overflow: TextOverflow.ellipsis,
                                               text: TextSpan(children: [
                                                 TextSpan(
-                                                  text: tweetAuthor.name,
+                                                  text: tweetAuthor!.name,
                                                   style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 18,
                                                   ),
                                                 ),
                                                 TextSpan(
-                                                  text: ' @${tweetAuthor.username}',
+                                                  text: ' @${tweetAuthor!.username}',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     color: Pallete.grey,

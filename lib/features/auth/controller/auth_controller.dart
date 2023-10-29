@@ -103,4 +103,21 @@ class AuthController extends StateNotifier<bool> {
     final updatedUser = UserModel.fromMap(document.data);
     return updatedUser;
   }
+
+  void logout({required BuildContext context}) async {
+    state = true;
+    final res = await _authAPI.logout();
+    state = false;
+    if (context.mounted) {
+      if (res == null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginView()),
+          (route) => false,
+        );
+      } else {
+        showSnackBar(context, res.message);
+      }
+    }
+  }
 }

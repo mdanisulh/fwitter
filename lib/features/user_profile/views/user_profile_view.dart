@@ -25,7 +25,6 @@ class UserProfileView extends ConsumerWidget {
                 'databases.*.collections.${AppwriteConstants.usersCollectionID}.documents.${user.uid}.update',
               )) {
                 user = UserModel.fromMap(data.payload);
-                return UserProfile(user: user);
               }
               return UserProfile(user: user);
             },

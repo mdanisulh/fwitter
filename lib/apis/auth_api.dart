@@ -12,6 +12,7 @@ abstract class IAuthAPI {
   Future<(Failure?, User?)> signUp({required String email, required String password});
   Future<(Failure?, Session?)> login({required String email, required String password});
   Future<User?> currentUserAccount();
+  Future<Failure?> logout();
 }
 
 class AuthAPI implements IAuthAPI {
@@ -48,6 +49,18 @@ class AuthAPI implements IAuthAPI {
       return await _account.get();
     } catch (e) {
       return null;
+    }
+  }
+
+  @override
+  Future<Failure?> logout() async {
+    try {
+      _account.deleteSession(sessionId: 'current');
+      return null;
+    } on AppwriteException catch (e, stackTrace) {
+      return Failure(e.message ?? 'An unknown error occurred!', stackTrace);
+    } catch (e, stackTrace) {
+      return Failure(e.toString(), stackTrace);
     }
   }
 }
