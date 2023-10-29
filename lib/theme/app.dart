@@ -4,13 +4,13 @@ import 'package:fwitter/theme/pallete.dart';
 class AppTheme {
   static ThemeData theme = ThemeData.dark().copyWith(
     appBarTheme: const AppBarTheme(
-      backgroundColor: Pallete.backgroundColor,
+      backgroundColor: Pallete.black,
       elevation: 0,
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Pallete.blue,
     ),
-    scaffoldBackgroundColor: Pallete.backgroundColor,
+    scaffoldBackgroundColor: Pallete.black,
     useMaterial3: true,
   );
 }

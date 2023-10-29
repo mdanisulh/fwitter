@@ -5,9 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 void showSnackBar(BuildContext context, String content) {
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(content),
-    ),
+    SnackBar(content: Text(content)),
   );
 }
 
@@ -21,4 +19,11 @@ Future<List<File>> pickImages() async {
     }
   }
   return images;
+}
+
+Future<File?> pickImage() async {
+  final picker = ImagePicker();
+  final image = await picker.pickImage(source: ImageSource.gallery);
+  if (image == null) return null;
+  return File(image.path);
 }

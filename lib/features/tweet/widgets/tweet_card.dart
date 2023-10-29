@@ -10,6 +10,7 @@ import 'package:fwitter/features/tweet/views/reply_view.dart';
 import 'package:fwitter/features/tweet/widgets/carousel_image.dart';
 import 'package:fwitter/features/tweet/widgets/styled_text.dart';
 import 'package:fwitter/features/tweet/widgets/tweet_icon_button.dart';
+import 'package:fwitter/features/user_profile/views/user_profile_view.dart';
 import 'package:fwitter/models/tweet_model.dart';
 import 'package:fwitter/theme/theme.dart';
 import 'package:any_link_preview/any_link_preview.dart';
@@ -38,9 +39,12 @@ class TweetCard extends ConsumerWidget {
                       children: [
                         Container(
                           margin: const EdgeInsets.all(10),
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundImage: NetworkImage(tweetAuthor.profilePic),
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(context, UserProfileView.route(tweetAuthor)),
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(tweetAuthor.profilePic),
+                            ),
                           ),
                         ),
                         Expanded(

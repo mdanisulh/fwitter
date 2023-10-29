@@ -52,6 +52,8 @@ class _SearchViewState extends ConsumerState<SearchView> {
                 width: 2,
               ),
             ),
+            filled: true,
+            fillColor: Pallete.searchBarColor,
             focusColor: Pallete.blue,
             contentPadding: const EdgeInsets.all(15).copyWith(left: 25),
             suffixIcon: IconButton(
