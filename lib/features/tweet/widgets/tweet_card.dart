@@ -99,6 +99,12 @@ class TweetCard extends ConsumerWidget {
                                                     fontSize: 18,
                                                   ),
                                                 ),
+                                                if (tweetAuthor!.isTwitterBlue)
+                                                  WidgetSpan(
+                                                      child: Padding(
+                                                    padding: const EdgeInsets.only(left: 3, right: 5),
+                                                    child: SvgPicture.asset(AssetsConstants.verifiedIcon, height: 20, width: 20),
+                                                  )),
                                                 TextSpan(
                                                   text: ' @${tweetAuthor!.username}',
                                                   style: const TextStyle(

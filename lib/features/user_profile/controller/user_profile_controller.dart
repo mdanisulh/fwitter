@@ -59,9 +59,7 @@ class UserProfileController extends StateNotifier<bool> {
         }
       }
     } catch (error) {
-      if (context.mounted) {
-        showSnackBar(context, error.toString());
-      }
+      return;
     }
   }
 

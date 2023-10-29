@@ -32,7 +32,7 @@ class SideDrawer extends ConsumerWidget {
                     title: const Text('Twitter Blue', style: TextStyle(fontSize: 22)),
                     onTap: () {
                       ref.read(userProfileControllerProvider.notifier).updateUserDetails(
-                            user: currentUser.copyWith(isTwitterBlue: true),
+                            user: currentUser.copyWith(isTwitterBlue: !currentUser.isTwitterBlue),
                             context: context,
                           );
                     },
