@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fwitter/common/common.dart';
 import 'package:fwitter/core/core.dart';
 import 'package:fwitter/features/auth/controller/auth_controller.dart';
+import 'package:fwitter/features/user_profile/controller/user_profile_controller.dart';
 import 'package:fwitter/theme/theme.dart';
 
 class EditProfileView extends ConsumerStatefulWidget {
@@ -15,29 +16,50 @@ class EditProfileView extends ConsumerStatefulWidget {
 }
 
 class _EditProfileViewState extends ConsumerState<EditProfileView> {
-  final nameEditingController = TextEditingController();
-  final usernameEditingController = TextEditingController();
-  final bioEditingController = TextEditingController();
+  late TextEditingController nameEditingController;
+  late TextEditingController usernameEditingController;
+  late TextEditingController bioEditingController;
   File? profilePic;
   File? bannerPic;
 
   @override
+  void initState() {
+    super.initState();
+    final user = ref.read(currentUserDetailsProvider).value;
+    nameEditingController = TextEditingController(text: user?.name);
+    usernameEditingController = TextEditingController(text: user?.username);
+    bioEditingController = TextEditingController(text: user?.bio);
+  }
+
+  @override
   void dispose() {
-    super.dispose();
     nameEditingController.dispose();
     usernameEditingController.dispose();
     bioEditingController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserDetailsProvider).value;
+    final isLoading = ref.watch(userProfileControllerProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              ref.read(userProfileControllerProvider.notifier).updateUserDetails(
+                    user: user!.copyWith(
+                      name: nameEditingController.text,
+                      username: usernameEditingController.text,
+                      bio: bioEditingController.text,
+                    ),
+                    context: context,
+                    profilePic: profilePic,
+                    bannerPic: bannerPic,
+                  );
+            },
             style: ButtonStyle(padding: MaterialStateProperty.all(const EdgeInsets.only(right: 25))),
             child: const Text(
               'Save',
@@ -46,7 +68,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
           ),
         ],
       ),
-      body: user == null
+      body: isLoading || user == null
           ? const Loader()
           : Column(
               children: [

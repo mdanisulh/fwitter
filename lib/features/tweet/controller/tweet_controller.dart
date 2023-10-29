@@ -34,9 +34,12 @@ final replyTweetProvider = FutureProvider.autoDispose.family((ref, Tweet tweet) 
   return tweetController.replyTweet(tweet: tweet);
 });
 
-final getLatestTweetProvider = StreamProvider.autoDispose((ref) {
+// * This provider is not completely related to tweetAPI or tweetController but appwrite only allows
+// * subscribing to channels simultaneously otherwise previous channel subscription is cancelled.
+// TODO: Find a better way to do this
+final getLatestDataProvider = StreamProvider.autoDispose((ref) {
   final tweetAPI = ref.watch(tweetAPIProvider);
-  return tweetAPI.getLatestTweet();
+  return tweetAPI.getLatestData();
 });
 
 class TweetController extends StateNotifier<bool> {

@@ -58,7 +58,7 @@ class AuthController extends StateNotifier<bool> {
         following: [],
         isTwitterBlue: false,
       );
-      final response = await _userAPI.saveUserData(userModel: userModel);
+      final response = await _userAPI.saveUserData(user: userModel);
       if (context.mounted) {
         if (response == null) {
           showSnackBar(context, 'Account successfully created. Please login!');

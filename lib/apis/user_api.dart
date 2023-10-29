@@ -11,9 +11,10 @@ final userAPIProvider = Provider.autoDispose((ref) {
 });
 
 abstract class IUserAPI {
-  Future<Failure?> saveUserData({required UserModel userModel});
+  Future<Failure?> saveUserData({required UserModel user});
   Future<Document> getUserData(String uid);
   Future<List<Document>> searchUsers(String query);
+  Future<Failure?> updateUserDetails({required UserModel user});
 }
 
 class UserAPI implements IUserAPI {
@@ -21,13 +22,13 @@ class UserAPI implements IUserAPI {
   UserAPI({required Databases db}) : _db = db;
 
   @override
-  Future<Failure?> saveUserData({required UserModel userModel}) async {
+  Future<Failure?> saveUserData({required UserModel user}) async {
     try {
       await _db.createDocument(
         databaseId: AppwriteConstants.databaseID,
         collectionId: AppwriteConstants.usersCollectionID,
-        documentId: userModel.uid,
-        data: userModel.toMap(),
+        documentId: user.uid,
+        data: user.toMap(),
       );
       return null;
     } on AppwriteException catch (error, stackTrace) {
@@ -64,6 +65,23 @@ class UserAPI implements IUserAPI {
       return users;
     } catch (e) {
       return [];
+    }
+  }
+
+  @override
+  Future<Failure?> updateUserDetails({required UserModel user}) async {
+    try {
+      await _db.updateDocument(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.usersCollectionID,
+        documentId: user.uid,
+        data: user.toMap(),
+      );
+      return null;
+    } on AppwriteException catch (error, stackTrace) {
+      return Failure(error.message ?? 'An unknown error occurred!', stackTrace);
+    } catch (error, stackTrace) {
+      return Failure(error.toString(), stackTrace);
     }
   }
 }
