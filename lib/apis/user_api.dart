@@ -15,6 +15,7 @@ abstract class IUserAPI {
   Future<Document> getUserData(String uid);
   Future<List<Document>> searchUsers(String query);
   Future<Failure?> updateUserDetails({required UserModel user});
+  Future<Failure?> followUser({required UserModel user, required UserModel currentUser});
 }
 
 class UserAPI implements IUserAPI {
@@ -76,6 +77,29 @@ class UserAPI implements IUserAPI {
         collectionId: AppwriteConstants.usersCollectionID,
         documentId: user.uid,
         data: user.toMap(),
+      );
+      return null;
+    } on AppwriteException catch (error, stackTrace) {
+      return Failure(error.message ?? 'An unknown error occurred!', stackTrace);
+    } catch (error, stackTrace) {
+      return Failure(error.toString(), stackTrace);
+    }
+  }
+
+  @override
+  Future<Failure?> followUser({required UserModel user, required UserModel currentUser}) async {
+    try {
+      await _db.updateDocument(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.usersCollectionID,
+        documentId: user.uid,
+        data: {'followers': user.followers},
+      );
+      await _db.updateDocument(
+        databaseId: AppwriteConstants.databaseID,
+        collectionId: AppwriteConstants.usersCollectionID,
+        documentId: currentUser.uid,
+        data: {'following': currentUser.following},
       );
       return null;
     } on AppwriteException catch (error, stackTrace) {

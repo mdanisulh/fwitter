@@ -16,6 +16,9 @@ class UserProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
+    bool isFollowing = currentUser?.following.contains(user.uid) ?? false;
+    if (currentUser?.uid == user.uid) isFollowing = true;
+    bool isFollower = currentUser?.followers.contains(user.uid) ?? false;
     return currentUser == null
         ? const Loader()
         : NestedScrollView(
@@ -63,20 +66,32 @@ class UserProfile extends ConsumerWidget {
                           right: 20,
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(context, EditProfileView.route());
+                              if (currentUser.uid == user.uid) {
+                                Navigator.push(context, EditProfileView.route());
+                              } else {
+                                ref.read(userProfileControllerProvider.notifier).followUser(
+                                      user: user,
+                                      currentUser: currentUser,
+                                      context: context,
+                                    );
+                              }
                             },
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Pallete.black),
+                              backgroundColor: MaterialStateProperty.all(isFollowing ? Pallete.black : Pallete.white),
                               shape: MaterialStatePropertyAll(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  side: const BorderSide(color: Pallete.white, width: 2),
+                                  side: const BorderSide(color: Pallete.white, width: 1.5),
                                 ),
                               ),
                             ),
                             child: Text(
-                              user.uid == currentUser.uid ? 'Edit Profile' : 'Follow',
-                              style: const TextStyle(color: Pallete.white, fontSize: 18, fontWeight: FontWeight.bold),
+                              user.uid == currentUser.uid
+                                  ? 'Edit Profile'
+                                  : isFollowing
+                                      ? 'Following'
+                                      : 'Follow',
+                              style: TextStyle(color: isFollowing ? Pallete.white : Pallete.black, fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -90,7 +105,13 @@ class UserProfile extends ConsumerWidget {
                     delegate: SliverChildListDelegate(
                       [
                         Text(user.name, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                        Text('@${user.username}', style: const TextStyle(fontSize: 18, color: Pallete.grey)),
+                        Row(
+                          children: [
+                            Text('@${user.username}', style: const TextStyle(fontSize: 18, color: Pallete.grey)),
+                            const SizedBox(width: 10),
+                            if (isFollower) const Text('Follows you', style: TextStyle(color: Pallete.grey, fontSize: 16)),
+                          ],
+                        ),
                         const SizedBox(height: 10),
                         Text(user.bio, style: const TextStyle(color: Pallete.white, fontSize: 16)),
                         const SizedBox(height: 10),
