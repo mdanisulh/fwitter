@@ -11,6 +11,5 @@ class AppTheme {
       backgroundColor: Pallete.blue,
     ),
     scaffoldBackgroundColor: Pallete.black,
-    useMaterial3: true,
   );
 }

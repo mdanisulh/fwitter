@@ -75,7 +75,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                         RichText(
                           text: TextSpan(
                             text: "Already have an account?",
-                            style: const TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16,color:Pallete.white),
                             children: [
                               TextSpan(
                                 text: ' Login',
