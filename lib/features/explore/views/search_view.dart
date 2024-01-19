@@ -26,49 +26,54 @@ class _SearchViewState extends ConsumerState<SearchView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          controller: searchTextController,
-          onSubmitted: (value) => setState(() {
-            isSearching = searchTextController.text.isNotEmpty;
-          }),
-          onChanged: (value) => setState(() {
-            isSearching = false;
-          }),
-          style: const TextStyle(fontSize: 16),
-          decoration: InputDecoration(
-            hintText: 'Search',
-            hintStyle: const TextStyle(fontSize: 16),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: const BorderSide(
-                color: Pallete.blue,
-                width: 2,
+        title: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: TextField(
+              controller: searchTextController,
+              onSubmitted: (value) => setState(() {
+                isSearching = searchTextController.text.isNotEmpty;
+              }),
+              onChanged: (value) => setState(() {
+                isSearching = false;
+              }),
+              style: const TextStyle(fontSize: 16),
+              decoration: InputDecoration(
+                hintText: 'Search',
+                hintStyle: const TextStyle(fontSize: 16),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(
+                    color: Pallete.blue,
+                    width: 2,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(
+                    color: Pallete.grey,
+                    width: 2,
+                  ),
+                ),
+                filled: true,
+                fillColor: Pallete.searchBarColor,
+                focusColor: Pallete.blue,
+                contentPadding: const EdgeInsets.all(15).copyWith(left: 25),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      if (isSearching) {
+                        searchTextController.clear();
+                        isSearching = false;
+                      } else {
+                        isSearching = searchTextController.text.isNotEmpty;
+                      }
+                    });
+                  },
+                  padding: const EdgeInsets.only(right: 20),
+                  icon: isSearching ? const Icon(Icons.clear, color: Pallete.grey) : const Icon(Icons.search, color: Pallete.grey),
+                ),
               ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: const BorderSide(
-                color: Pallete.grey,
-                width: 2,
-              ),
-            ),
-            filled: true,
-            fillColor: Pallete.searchBarColor,
-            focusColor: Pallete.blue,
-            contentPadding: const EdgeInsets.all(15).copyWith(left: 25),
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  if (isSearching) {
-                    searchTextController.clear();
-                    isSearching = false;
-                  } else {
-                    isSearching = searchTextController.text.isNotEmpty;
-                  }
-                });
-              },
-              padding: const EdgeInsets.only(right: 20),
-              icon: isSearching ? const Icon(Icons.clear, color: Pallete.grey) : const Icon(Icons.search, color: Pallete.grey),
             ),
           ),
         ),
@@ -81,7 +86,12 @@ class _SearchViewState extends ConsumerState<SearchView> {
                     itemCount: users.length,
                     itemBuilder: (context, index) {
                       final user = users[index];
-                      return SearchTile(user: user);
+                      return Center(
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 600),
+                          child: SearchTile(user: user),
+                        ),
+                      );
                     },
                   );
                 },

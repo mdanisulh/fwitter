@@ -97,6 +97,7 @@ class TweetCard extends ConsumerWidget {
                                                   style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 18,
+                                                    color: Pallete.white,
                                                   ),
                                                 ),
                                                 if (tweetAuthor!.isTwitterBlue)

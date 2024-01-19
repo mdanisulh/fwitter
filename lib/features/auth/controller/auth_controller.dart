@@ -16,15 +16,15 @@ final authControllerProvider = StateNotifierProvider.autoDispose<AuthController,
   ),
 );
 
-final currentUserDetailsProvider = FutureProvider.autoDispose((ref) async {
+final currentUserDetailsProvider = StreamProvider.autoDispose((ref) async* {
   final currentUser = await ref.watch(authControllerProvider.notifier).currentUser();
   final userDetails = await ref.watch(authControllerProvider.notifier).getUserData(currentUser?.$id);
-  return userDetails;
+  yield userDetails;
 });
 
-final userDetailsProvider = FutureProvider.autoDispose.family((ref, String? uid) {
+final userDetailsProvider = StreamProvider.autoDispose.family((ref, String? uid) async* {
   final authController = ref.watch(authControllerProvider.notifier);
-  return authController.getUserData(uid);
+  yield await authController.getUserData(uid);
 });
 
 final currentUserAccountProvider = FutureProvider.autoDispose(

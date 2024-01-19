@@ -21,7 +21,7 @@ class StyledText extends StatelessWidget {
           ),
         );
       } else {
-        textSpans.add(TextSpan(text: '$element '));
+        textSpans.add(TextSpan(text: '$element ', style: const TextStyle(color: Pallete.white)));
       }
     });
     return RichText(
