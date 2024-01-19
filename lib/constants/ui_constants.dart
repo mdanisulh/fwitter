@@ -15,10 +15,11 @@ class UIConstants {
     );
   }
 
-  static const List<Widget> bottomTabBarPages = [
-    TweetList(),
-    SearchView(),
-    Text('Notifications'),
-    Text('Messages'),
+  static List<Widget> bottomTabBarPages = [
+    const TweetList(),
+    const SearchView(),
+    Scaffold(
+      appBar: AppBar(title: const Text('Notifications')),
+    ),
   ];
 }

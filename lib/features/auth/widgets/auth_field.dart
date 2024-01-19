@@ -23,7 +23,7 @@ class AuthField extends StatelessWidget {
       style: const TextStyle(fontSize: 20),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(fontSize: 20),
+        labelStyle: const TextStyle(fontSize: 20, color: Pallete.grey),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: const BorderSide(
